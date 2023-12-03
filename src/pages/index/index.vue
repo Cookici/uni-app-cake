@@ -1,41 +1,29 @@
 <template>
-  <view class="content">
-    <image class="logo" src="/static/logo.png" />
-    <view class="text-area">
-      <text class="title">{{ title }}</text>
-    </view>
-  </view>
+  <!-- 自定义导航栏 -->
+  <custom-navbar />
+  <!-- 自定义轮播图 -->
+  <CakeSwiper :list="bannerList" />
+  <view class="index">index</view>
 </template>
 
 <script setup lang="ts">
+import { getHomeBannerApi } from '@/services/home'
+import CustomNavbar from './components/CustomNavbar.vue'
+import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
-const title = ref('Hello')
+import type { BannerItem } from '@/types/home'
+
+const bannerList = ref<BannerItem[]>([])
+
+const getHomeBannerData = async () => {
+  const res = await getHomeBannerApi()
+  console.log(res)
+  bannerList.value = res.result
+}
+
+onLoad(() => {
+  getHomeBannerData()
+})
 </script>
 
-<style>
-.content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.logo {
-  height: 200rpx;
-  width: 200rpx;
-  margin-top: 200rpx;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 50rpx;
-}
-
-.text-area {
-  display: flex;
-  justify-content: center;
-}
-
-.title {
-  font-size: 36rpx;
-  color: #8f8f94;
-}
-</style>
+<style></style>
